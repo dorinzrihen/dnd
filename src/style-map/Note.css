@@ -1,0 +1,19 @@
+.note{
+    z-index: 2;
+    position: absolute;
+    display: flex;
+    text-align: center;
+    padding: 30px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.note > p{
+    position: absolute;
+    top: 2px;
+    z-index: 2;
+}
+
+.note > textarea{
+    width: 50px;
+}
