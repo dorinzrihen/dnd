@@ -3,13 +3,13 @@ import { BrowserRouter, Route } from "react-router-dom";
 import RecapPage from "./RecapPage";
 import MapPage from "./MapPage";
 import LandingPage from "./LandingPage";
-import Header from './component/Header'
+import NavBar from './component/Nav/NavBar'
 
 const DndApp = () => {
   return (
     <div>
       <BrowserRouter>
-        <Header />
+        <NavBar />
         <Route exact path="/" component={LandingPage}></Route>
         <Route exact path="/maps" component={MapPage}></Route>
         <Route exact path="/recap" component={RecapPage}></Route>

@@ -1,0 +1,16 @@
+.mapBox {
+  width: 85%;
+  height: 70vh;
+  border: 1px solid black;
+  margin-top: 20px;
+}
+
+.MapContainer{
+    height: calc(100% - 80px);
+    position: relative;
+}
+
+.mapBox .imgFormat{
+  width: 100%;
+  height: 100% ;
+}

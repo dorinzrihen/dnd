@@ -3,11 +3,16 @@ import MyMap from "./MyMap";
 import DataService from "../utility/DataService";
 import Note from "./Note";
 import NewNote from "./NewNote";
+import Util from '../utility/Util';
+import Tools from './Tools';
+import "../style-map/MapContainer.css";
+import MapDescription from './MapDescription';
+
 
 const MapContainer = (props) => {
   const [response, setResponse] = useState([]);
-  const [noteCordineate, setNoteCordineate] = useState([]);
   const [newNotes, setNewNotes] = useState([]);
+
   const ref = useRef();
 
   //run only once
@@ -19,37 +24,73 @@ const MapContainer = (props) => {
   }, []);
 
   const printMousePos = (event) => {
-    if (ref.current.contains(event.target)) {
+    const myEvent = event;
+    if (ref.current.contains(myEvent.target)) {
       return;
     }
-    const imgCordination = event.target;
-    const left = (event.clientX - imgCordination.x) / window.innerWidth;
-    const top = (event.clientY - imgCordination.y) / window.innerHeight;
-    const leftPercentage = Math.floor(left.toFixed(2) * 100);
-    const topPercentage = Math.floor(top.toFixed(2) * 100);
-    let updateValue = Array.from(newNotes);
-    updateValue.push([leftPercentage, topPercentage]);
-    console.log("im here");
+    const updateValue = Util.getCoordinates(myEvent,newNotes);
     setNewNotes(updateValue);
+  };
+
+  const renderCards = async () => {
+    const response = await DataService.get();
+    setResponse(response.data);
+  };
+
+  const removeEditCard = (cotdineate) => {
+    let newArrayOfNew = [];
+    for (const newNotesCordineate of newNotes) {
+      (cotdineate[0] !== newNotesCordineate[0] ||
+        cotdineate[1] !== newNotesCordineate[1]) &&
+        newArrayOfNew.push(newNotesCordineate);
+    }
+    setNewNotes(newArrayOfNew);
+  };
+
+  const addNewNote = async (info) => {
+    const myInfo = {
+      xCordination: info.left,
+      yCordination: info.top,
+      info: info.value,
+    };
+    await DataService.create(myInfo);
+    removeEditCard([info.left, info.top]);
+    renderCards();
   };
 
   const notes = response.map((note) => {
     return (
-      <Note key={note.id} left={note.xCordination} top={note.yCordination} />
+      <Note
+        key={note.id}
+        left={note.xCordination}
+        top={note.yCordination}
+        info={note.info}
+      />
     );
   });
 
   const setNewNote = newNotes.map((note, index) => {
-    return <NewNote key={index} left={note[0]} top={note[1]} />;
+    return (
+      <NewNote
+        saveNewCard={addNewNote}
+        key={index}
+        left={note[0]}
+        top={note[1]}
+      />
+    );
   });
 
   return (
-    <div className="test" onClick={printMousePos}>
-      <div ref={ref}>
-        {notes}
-        {setNewNote}
+    <div className="mapBox">
+      <Tools/>
+      <div className="MapContainer" onClick={printMousePos}>
+        <div ref={ref}>
+          {notes}
+          {setNewNote}
+        </div>
+        <MyMap />
       </div>
-      <MyMap />
+      <MapDescription />
     </div>
   );
 };

@@ -4,7 +4,7 @@ import MapContainerHook from './component/MapContainerHook';
 
 
 const MapPage = () => {
-  return <div>
+  return <div className="testit">
       <MapContainerHook/>
   </div>;
 };

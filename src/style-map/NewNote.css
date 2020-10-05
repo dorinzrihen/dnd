@@ -1,19 +1,16 @@
-.note{
+.newNote{
     z-index: 2;
-    position: absolute;
     display: flex;
+    position: absolute;
+    flex-direction: column;
     text-align: center;
-    padding: 30px;
     background-size: cover;
     background-repeat: no-repeat;
+    padding: 20px;
 }
 
-.note > p{
-    position: absolute;
-    top: 2px;
-    z-index: 2;
-}
-
-.note > textarea{
-    width: 50px;
+.newNote > textarea{
+    direction:RTL;
+    width: 70px;
+    height: 40px;
 }
