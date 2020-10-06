@@ -1,16 +1,18 @@
-import React, { Component } from 'react';
-import '../style-map/Tools.css'
+import React, { useState, useEffect } from "react";
+import "../style-map/Tools.css";
+import ToolBtn from './ToolBtn'
 
-class Tools extends Component {
-    render() {
-        return (
-            <div className="tools">
-                <button>note</button>
-                <button>dot</button>
-                <button>line</button>
-            </div>
-        );
+const Tools = (props) => {
+    let displayTools = [];
+    for(const tool in props.tools){
+        const btn = <ToolBtn key={tool} click={() => {props.changeTool(props.tools[tool])}} title={props.tools[tool]}/>
+        displayTools.push(btn);
     }
-}
+  return (
+    <div className="tools">
+        {displayTools}
+    </div>
+  );
+};
 
 export default Tools;

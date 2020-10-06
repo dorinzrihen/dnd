@@ -1,0 +1,9 @@
+.mapDescription{
+    margin: 5px;
+}
+
+.descriptionInfo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

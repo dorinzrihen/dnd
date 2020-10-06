@@ -3,38 +3,52 @@ import MyMap from "./MyMap";
 import DataService from "../utility/DataService";
 import Note from "./Note";
 import NewNote from "./NewNote";
-import Util from '../utility/Util';
-import Tools from './Tools';
+import Util from "../utility/Util";
+import Tools from "./Tools";
 import "../style-map/MapContainer.css";
-import MapDescription from './MapDescription';
+import MapDescription from "./MapDescription";
+import MapCanvas from './canvas/MapCanvas';
 
+let toolOptions = { notes: true}
 
 const MapContainer = (props) => {
   const [response, setResponse] = useState([]);
   const [newNotes, setNewNotes] = useState([]);
+  const [pickTool, setPickTool] = useState("");
+  const [options , setOptions] = useState(toolOptions);
+  const [counter , setCounter] = useState(0);
 
   const ref = useRef();
+  const refContainer = useRef();
 
   //run only once
   useEffect(() => {
     (async function () {
-      const response = await DataService.get();
-      setResponse(response.data);
+      const responseApi = await DataService.get();
+      setResponse(responseApi.data);
     })();
-  }, []);
+  },[]);
+
+function updateOptions(newValue){
+  console.log(newValue);
+  setOptions(newValue)
+  setCounter(counter+1)
+}
 
   const printMousePos = (event) => {
     const myEvent = event;
     if (ref.current.contains(myEvent.target)) {
       return;
     }
-    const updateValue = Util.getCoordinates(myEvent,newNotes);
-    setNewNotes(updateValue);
+    if (pickTool === "note") {
+      const updateValue = Util.getCoordinates(myEvent, newNotes);
+      setNewNotes(updateValue);
+    }
   };
 
-  const renderCards = async () => {
-    const response = await DataService.get();
-    setResponse(response.data);
+  const renderNotes = async () => {
+    const responseApi = await DataService.get();
+    setResponse(responseApi.data);
   };
 
   const removeEditCard = (cotdineate) => {
@@ -55,16 +69,30 @@ const MapContainer = (props) => {
     };
     await DataService.create(myInfo);
     removeEditCard([info.left, info.top]);
-    renderCards();
+    renderNotes();
   };
+
+  async function updateCrud(id, data) {
+    await DataService.update(id, { info: data });
+    renderNotes();
+  }
+
+  async function deleteCrud(id) {
+    await DataService.remove(id);
+    await renderNotes();
+  }
 
   const notes = response.map((note) => {
     return (
       <Note
+        isVisibale={options.notes}
+        id={note.id}
         key={note.id}
         left={note.xCordination}
         top={note.yCordination}
         info={note.info}
+        onUpdate={updateCrud}
+        onDelete={deleteCrud}
       />
     );
   });
@@ -72,6 +100,7 @@ const MapContainer = (props) => {
   const setNewNote = newNotes.map((note, index) => {
     return (
       <NewNote
+        isVisibale={""}
         saveNewCard={addNewNote}
         key={index}
         left={note[0]}
@@ -82,15 +111,19 @@ const MapContainer = (props) => {
 
   return (
     <div className="mapBox">
-      <Tools/>
-      <div className="MapContainer" onClick={printMousePos}>
+      <Tools
+        changeTool={(tool) => setPickTool(tool)}
+        tools={Util.toolsOptions()}
+      />
+      <div ref={refContainer} className='MapContainer' onClick={printMousePos}>
         <div ref={ref}>
           {notes}
           {setNewNote}
         </div>
+        <MapCanvas size={refContainer}/>
         <MyMap />
       </div>
-      <MapDescription />
+      <MapDescription updateInfo={updateOptions} options={options}/>
     </div>
   );
 };

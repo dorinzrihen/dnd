@@ -10,7 +10,16 @@
     position: relative;
 }
 
+.remove-object{
+  opacity: 0.3;
+  pointer-events: none;
+
+}
+
 .mapBox .imgFormat{
   width: 100%;
   height: 100% ;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
