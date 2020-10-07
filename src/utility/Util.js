@@ -11,25 +11,20 @@ const noteBackGround = () => {
 };
 
 //get x y to so spesific img
-const getCoordinates = (event,newNotes) => {
-    const imgCoordination = event.target.getBoundingClientRect();
-    const left = (event.clientX - imgCoordination.x - 20) / imgCoordination.width;
-    const top = (event.clientY - imgCoordination.y - 5) / imgCoordination.height;
-    const leftPercentage = Math.floor(left.toFixed(3) * 100);
-    const topPercentage = Math.floor(top.toFixed(3)* 100);
-    let updateValue = Array.from(newNotes);
-    updateValue.push([leftPercentage, topPercentage]);
-    return updateValue;
-}
+const getCoordinates = (event, existsPoints) => {
+  const imgCoordination = event.target.getBoundingClientRect();
+  const left = (event.clientX - imgCoordination.x - 20) / imgCoordination.width;
+  const top = (event.clientY - imgCoordination.y - 5) / imgCoordination.height;
+  const leftPercentage = Math.floor(left.toFixed(3) * 100);
+  const topPercentage = Math.floor(top.toFixed(3) * 100);
+  let updateValue = Array.from(existsPoints);
+  updateValue.push([leftPercentage, topPercentage]);
+  return updateValue;
+};
 
 const toolsOptions = () => {
-  const tools = {
-    0:"note",
-    1:"dot",
-    2:"select area"
-  }
-  return tools
-}
+  return ["note", "dot", "select area"];
+};
 
 export default {
   noteBackGround,

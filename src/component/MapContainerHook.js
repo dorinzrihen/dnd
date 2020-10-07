@@ -17,6 +17,8 @@ const MapContainer = (props) => {
   const [pickTool, setPickTool] = useState("");
   const [options , setOptions] = useState(toolOptions);
   const [counter , setCounter] = useState(0);
+  const [area, setArea] = useState([]);
+  const [editArea, setEditArea] = useState([]);
 
   const ref = useRef();
   const refContainer = useRef();
@@ -44,7 +46,27 @@ function updateOptions(newValue){
       const updateValue = Util.getCoordinates(myEvent, newNotes);
       setNewNotes(updateValue);
     }
+    if (pickTool === "select area") {
+      const imgCoordination = event.target.getBoundingClientRect();
+      const left = (event.clientX - imgCoordination.x) ;
+      const top = (event.clientY - imgCoordination.y);
+      let updateValue = Array.from(editArea)
+      updateValue.push([left,top])
+      setEditArea(updateValue);
+    }
   };
+
+  const updateAreaSelected = (event) =>{
+    if(pickTool !== "select area"){
+      return;
+    }
+    const newArr = Array.from(editArea);
+    let areaArr = Array.from(area);
+    areaArr.push([newArr]);
+    setArea(areaArr);
+    setEditArea('')
+    setPickTool('');
+  }
 
   const renderNotes = async () => {
     const responseApi = await DataService.get();
@@ -109,18 +131,21 @@ function updateOptions(newValue){
     );
   });
 
+  let exstraInfo = <div>HI</div>;
+
   return (
     <div className="mapBox">
       <Tools
         changeTool={(tool) => setPickTool(tool)}
         tools={Util.toolsOptions()}
       />
-      <div ref={refContainer} className='MapContainer' onClick={printMousePos}>
+      <div ref={refContainer} className='MapContainer' onClick={printMousePos} onDoubleClick={updateAreaSelected}>
         <div ref={ref}>
+          {exstraInfo}
           {notes}
           {setNewNote}
         </div>
-        <MapCanvas size={refContainer}/>
+        <MapCanvas size={refContainer} points={editArea} fullPoints={area}/>
         <MyMap />
       </div>
       <MapDescription updateInfo={updateOptions} options={options}/>
