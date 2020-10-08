@@ -31,7 +31,9 @@ const MapCanvas = (props) => {
     if (props.fullMapsPoints.length) {
       for (const map of props.fullMapsPoints) {
         const backToPoints = Util.getBackCoordinate(map.mapCoordinate , props.size);
-        setPoints(ctx, backToPoints, map.color);
+        if(props.unShow.indexOf(map.id) === -1){
+          setPoints(ctx, backToPoints, map.color);
+        }
       }
     }
   };

@@ -12,18 +12,19 @@ import MoreInfo from "./canvas/MoreInfo";
 import useWindowSize from './useWindowSize';
 
 
-let toolOptions = { notes: true };
-
 const MapContainer = (props) => {
   const [response, setResponse] = useState([]);
   const [exsitNotes, setExsitNotes] = useState([]);
   const [newNotes, setNewNotes] = useState([]);
   const [pickTool, setPickTool] = useState("");
-  const [options, setOptions] = useState(toolOptions);
-  const [counter, setCounter] = useState(0);
   const [area, setArea] = useState([]);
+  const [showMarks , setShowMard] = useState([]);
+
   const [editArea, setEditArea] = useState([]);
+  const [text, setText] = useState('');
+
   const [width, height] = useWindowSize();
+  
 
   const ref = useRef();
   const refContainer = useRef();
@@ -31,16 +32,20 @@ const MapContainer = (props) => {
   //run only once
   useEffect(() => {
     (async function () {
-      const response = await DataService.get("1/notesArr");
-      const responseArea = await DataService.get("1/mapCoordinates");
+      const response = await DataService.get(`${props.id}/notesArr`);
+      const responseArea = await DataService.get(`${props.id}/mapCoordinates`);
       setExsitNotes(response.data);
       setArea(responseArea.data);
+
     })();
   }, []);
 
-  function updateOptions(newValue) {
-    setOptions(newValue);
-    setCounter(counter + 1);
+  function updateOptions(id) {
+    let mySelector = Array.from(showMarks);
+    mySelector.indexOf(id) === -1 ? mySelector.push(id) : mySelector.splice(mySelector.indexOf(id), 1)
+    setShowMard(mySelector);
+    console.log(mySelector);
+    renderMap();
   }
 
   const printMousePos = (event) => {
@@ -71,14 +76,21 @@ const MapContainer = (props) => {
     setPickTool("");
   };
 
+ 
   const updateNewMapSelectArea = async () => {
     const myInfo = {
-      tite: "something",
+      title: text,
       color: Util.getRandomColor(),
       mapCoordinate: Util.setAsPercentage(editArea , refContainer),
     };
-    await DataService.create(myInfo, "1/mapCoordinates");
+    await DataService.create(myInfo, `${props.id}/mapCoordinates`);
+    renderMap();
   };
+
+  const removeMapCrud = async (id) => {
+    await DataService.remove(`${props.id}/mapCoordinates/${id}`);
+    renderMap();
+  }
 
   //notes
   const removeEditNote = (cotdineate) => {
@@ -93,9 +105,11 @@ const MapContainer = (props) => {
 
   // CRUD for notes
 
-  const renderNotes = async () => {
-    const response = await DataService.get("1/notesArr");
+  const renderMap = async () => {
+    const response = await DataService.get(`${props.id}/notesArr`);
+    const responseArea = await DataService.get(`${props.id}/mapCoordinates`);
     setExsitNotes(response.data);
+    setArea(responseArea.data);
   };
 
   const addNewNote = async (info) => {
@@ -105,26 +119,26 @@ const MapContainer = (props) => {
       info: info.value,
       noteImg: info.noteBackGround,
     };
-    await DataService.create(myInfo, "1/notesArr");
+    await DataService.create(myInfo, `${props.id}/notesArr`);
     removeEditNote([info.left, info.top]);
-    renderNotes();
+    renderMap();
   };
 
   async function updateCrud(id, data) {
-    await DataService.update(`1/notesArr/${id}`, { info: data });
-    renderNotes();
+    await DataService.update(`${props.id}/notesArr/${id}`, { info: data });
+    renderMap();
   }
 
   async function deleteCrud(id) {
-    await DataService.remove(`1/notesArr/${id}`);
-    renderNotes();
+    await DataService.remove(`${props.id}/notesArr/${id}`);
+    renderMap();
   }
 
   //update new notes and rerender exist notes
   const notes = exsitNotes.map((note, index) => {
     return (
       <Note
-        isVisibale={options.notes}
+        isVisibale={showMarks.indexOf('notes') === -1 ? true : false }
         id={note.id}
         key={index}
         left={note.x}
@@ -140,7 +154,7 @@ const MapContainer = (props) => {
   const setNewNote = newNotes.map((note, index) => {
     return (
       <NewNote
-        isVisibale={""}
+        isVisibale={true}
         saveNewCard={addNewNote}
         key={index}
         left={note[0]}
@@ -151,7 +165,7 @@ const MapContainer = (props) => {
   });
 
   let exstraInfo = pickTool === "select area" && (
-    <MoreInfo value="Add Area Title" />
+    <MoreInfo value="Add Area Title" saveInfo={(value)=>setText(value)} />
   );
 
   return (
@@ -171,10 +185,10 @@ const MapContainer = (props) => {
           {notes}
           {setNewNote}
         </div>
-        <MapCanvas size={refContainer} points={editArea} fullMapsPoints={area}/>
-        <MyMap />
+        <MapCanvas size={refContainer} points={editArea} fullMapsPoints={area} unShow={showMarks} />
+        <MyMap backgroundMap={props.src}/>
       </div>
-      <MapDescription updateInfo={updateOptions} options={options} />
+      <MapDescription updateInfo={updateOptions} mapSelect={area} removeMap={removeMapCrud}/>
     </div>
   );
 };

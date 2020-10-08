@@ -1,11 +1,22 @@
-import React ,{ useState } from "react";
+import React, { useState , useRef } from "react";
+import SquareButton from "../buttons/SquareButton";
 
 const MoreInfo = (props) => {
-    const [value,setValue] = useState('');
-  return <div className="moreInfoSelectArea">
-      <input type="text" placeholder={props.value} onChange={(e) => setValue(e.target.value)}/>
-      <button>Add map title</button>
-  </div>
+  const [value, setValue] = useState("");
+  const ref = useRef();
+
+  return (
+    <div className="moreInfoSelectArea">
+      <input
+        type="text"
+        placeholder={props.value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+      <button ref={ref} onClick={()=>{
+        ref.current.setAttribute("disabled", "disabled");
+        props.saveInfo({ value })}}>Create</button>
+    </div>
+  );
 };
 
 export default MoreInfo;

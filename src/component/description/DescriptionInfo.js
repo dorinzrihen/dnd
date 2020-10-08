@@ -6,7 +6,7 @@ const DescriptionInfo = (props) => {
       <input
         type="checkBox"
         defaultChecked={props.isClicked}
-        onChange={(e) => props.updateInfo(e.target.checked, props.objValue)}
+        onChange={(e) => props.updateInfo(props.returnVal)}
       />
       <p>{props.objValue}</p>
     </div>

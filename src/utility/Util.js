@@ -25,7 +25,7 @@ const getCoordinates = (event, existsPoints) => {
 };
 
 const toolsOptions = () => {
-  return ["note", "select area"];
+  return ["note", "select area",'Text'];
 };
 
 

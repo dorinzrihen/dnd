@@ -9,8 +9,13 @@ img{
   padding: 0;
 }
 
-.testit{
+.MapPage{
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+}
 
+.MapPageBtn{
+  align-self: left;
 }

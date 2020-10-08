@@ -1,0 +1,22 @@
+.MapNotification {
+  position: absolute;
+  width: 100%;
+  position: fixed;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  pointer-events: all;
+}
+
+.notification {
+  width: 200px;
+  height: 75px;
+  background-color: rgb(216, 216, 216);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  margin-top: 10px;
+  border: 1px black solid;
+}

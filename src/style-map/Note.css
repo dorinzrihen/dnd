@@ -14,3 +14,9 @@
   max-width: 90px;
   overflow-wrap: break-word;
 }
+
+.note > textarea{
+  direction:RTL;
+  width: 70px;
+  height: 40px;
+}

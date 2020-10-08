@@ -1,28 +1,44 @@
 import React, { Component } from "react";
-import styled from "styled-components";
-import DescriptionInfo from './description/DescriptionInfo';
-import '../style-map/MapDescription.css'
-
+import DescriptionInfo from "./description/DescriptionInfo";
+import "../style-map/MapDescription.css";
+import SquareButton from "./buttons/SquareButton";
 
 const MapDescription = (props) => {
-  function updateInfo(click,value){
-    let newValue = props.options;
-    newValue[value] = click;
-    props.updateInfo(newValue);
+  function updateInfo(click) {
+    props.updateInfo(click);
   }
 
   let description = [];
-  for(const [key, value] of Object.entries(props.options)){
-    const obj = <DescriptionInfo updateInfo={updateInfo} key={key} objValue={key} isClicked={value}/>
+
+  const obj = (
+    <DescriptionInfo
+      updateInfo={updateInfo}
+      key={"notes"}
+      objValue={"notes"}
+      returnVal={"notes"}
+      isClicked={true}
+    />
+  );
+
+  description.push(obj);
+
+  for (const map of props.mapSelect) {
+    const obj = (
+      <div key={map.title.value}>
+        <DescriptionInfo
+          updateInfo={updateInfo}
+          key={map.id}
+          objValue={map.title.value}
+          returnVal={map.id}
+          isClicked={true}
+        />
+        <SquareButton background="#787878" value="Remove" clickHandler={()=>props.removeMap(map.id)}/>
+      </div>
+    );
     description.push(obj);
   }
 
-
-  return (
-    <div className="mapDescription">
-      {description}
-    </div>
-  );
+  return <div className="mapDescription">{description}</div>;
 };
 
 export default MapDescription;
