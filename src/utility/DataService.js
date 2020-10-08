@@ -1,16 +1,19 @@
 import http from "./Api";
 
 
-const get = () => {
-  return http.get();
+
+const get = (id) => {
+  return http.get(`/${id}`);
+}
+
+//create or update new sheet 
+const create = (data,path)  => {
+  return http.post(`/${path}`, data);
 };
 
-const create = data => {
-  return http.post("", data);
-};
 
 const update = (id, data) => {
-  return http.put(`/${id}`, data);
+  return http.put(`${id}`, data);
 };
 
 const remove = id => {

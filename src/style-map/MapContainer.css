@@ -29,3 +29,21 @@
 .canvas{
   z-index: 1;
 }
+
+.moreInfoSelectArea{
+  position: absolute;
+  top: 10px;
+  left: 5px;
+}
+
+/* btn */
+.SquareButton{
+  padding: 2px;
+  margin: 2px;
+  color: white;
+  border: none;
+}
+
+.SquareButton:hover{
+  opacity: 0.9;
+}

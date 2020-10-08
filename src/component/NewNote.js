@@ -1,18 +1,15 @@
 import React, { useState } from "react";
 import "../style-map/NewNote.css";
-import Util from '../utility/Util';
-
-
-
+import SquareButton from "./buttons/SquareButton";
 
 const NewNote = (props) => {
   const [value, setValue] = useState('');
-  const background = Util.noteBackGround();
+
 
   const mystyle = {
     top: `${props.top}%`,
     left: `${props.left}%`,
-    backgroundImage: `url(${background})`,
+    backgroundImage: `url(${props.noteSrc})`,
   };
   return (
     <div className="newNote" style={mystyle}>
@@ -20,11 +17,8 @@ const NewNote = (props) => {
         type="text"
         onChange={(e) => setValue(e.target.value)}
       ></textarea>
-      <button
-        onClick={() => props.saveNewCard({ top: props.top, left: props.left, value })}
-      >
-        click
-      </button>
+      <SquareButton background="#0185ff" value="Create" clickHandler={() => props.saveNewCard({noteBackGround: props.noteSrc, top: props.top, left: props.left, value})} />
+
     </div>
   );
 };

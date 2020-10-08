@@ -11,7 +11,7 @@ const Note = (props) => {
   const mystyle = {
     top: `${props.top}%`,
     left: `${props.left}%`,
-    backgroundImage: `url(${Util.noteBackGround()})`,
+    backgroundImage: `url(${props.noteSrc})`,
   };
 
   const openBtn = () => {
@@ -19,7 +19,10 @@ const Note = (props) => {
   };
 
   function handleDelete() {
-    props.onDelete(props.id);
+    if (open) {
+      setUpdateMode(false);
+      props.onDelete(props.id);
+    }
   }
 
   function handleUpdate() {
@@ -33,8 +36,8 @@ const Note = (props) => {
 
   const AddedElement = (
     <div>
-      <SquareButton value="Update" clickHandler={handleUpdate} />
-      <SquareButton value="Delete" clickHandler={handleDelete} />
+      <SquareButton background="#0185ff" value="Update" clickHandler={handleUpdate} />
+      <SquareButton background="#B31004" value="Delete" clickHandler={handleDelete} />
     </div>
   );
 

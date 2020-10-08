@@ -1,3 +1,5 @@
+import DataService from "./DataService";
+
 const noteBackGround = () => {
   const arr = [
     "https://res.cloudinary.com/dqrxjebxc/image/upload/v1601887983/notes/note5_lnorfy.png",
@@ -23,11 +25,47 @@ const getCoordinates = (event, existsPoints) => {
 };
 
 const toolsOptions = () => {
-  return ["note", "dot", "select area"];
+  return ["note", "select area"];
 };
+
+
+const getRandom = () => {
+  return Math.floor(Math.random() * 999999) + 10000;
+}
+
+const getRandomColor = () =>{
+  return Math.floor(Math.random() * 360);
+}
+
+const setAsPercentage = (arr, ref) => {
+  const getSize = ref.current.getBoundingClientRect();
+  const arrUpdated = arr.map(coordinate =>{
+    const left = coordinate[0] / getSize.width;
+    const top = coordinate[1] / getSize.height;
+    const leftPercentage = Math.floor(left * 100);
+    const topPercentage = Math.floor(top * 100);
+    return [leftPercentage,topPercentage]
+  })
+  return arrUpdated;
+}
+
+const getBackCoordinate = (arr, ref) => {
+  const getSize = ref.current.getBoundingClientRect();
+  const arrUpdated = arr.map(coordinate =>{
+    const left = coordinate[0] * getSize.width / 100;
+    const top = coordinate[1] * getSize.height / 100;
+    return [left+5,top+5]
+  })
+  return arrUpdated;
+
+}
 
 export default {
   noteBackGround,
   getCoordinates,
   toolsOptions,
+  getRandom,
+  getRandomColor,
+  setAsPercentage,
+  getBackCoordinate,
 };

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import Util from '../../utility/Util'
 
 const MapCanvas = (props) => {
   const [size, setSize] = useState([]);
@@ -10,7 +11,8 @@ const MapCanvas = (props) => {
     setSize([getSize.width, getSize.height]);
   }, []);
 
-  const setPoints = (ctx, points) => {
+  const setPoints = (ctx, points, color=120) => {
+    ctx.fillStyle = `hsla(${color},100%,50%,0.3)`;
     ctx.beginPath();
     ctx.moveTo(points[0][0], points[0][1]);
     for (let i = 1; i < points.length; i++) {
@@ -22,14 +24,14 @@ const MapCanvas = (props) => {
   };
 
   const draw = (ctx) => {
-    ctx.fillStyle = "hsla(120,100%,50%,0.3)";
     ctx.clearRect(0, 0, size[0], size[1]);
     if (props.points.length) {
       setPoints(ctx, props.points);
     }
-    if (props.fullPoints.length) {
-      for (const map of props.fullPoints) {
-        setPoints(ctx, ...map);
+    if (props.fullMapsPoints.length) {
+      for (const map of props.fullMapsPoints) {
+        const backToPoints = Util.getBackCoordinate(map.mapCoordinate , props.size);
+        setPoints(ctx, backToPoints, map.color);
       }
     }
   };
