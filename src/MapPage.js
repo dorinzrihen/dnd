@@ -13,20 +13,18 @@ const MapPage = () => {
       const response = await DataService.get("");
       setResponse(response.data);
     })();
-  }, [response]);
+  }, [editMode]);
 
   function handleCreate() {
     setEditMode(true);
   }
 
   async function createNewMap(value) {
-    const response = await DataService.get("");
     const myInfo = {
       mapSrc: value,
     };
     await DataService.create(myInfo, ``);
     setEditMode(false);
-    setResponse(response.data);
   }
 
   const container = response.map((map) => {

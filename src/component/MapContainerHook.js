@@ -36,16 +36,17 @@ const MapContainer = (props) => {
       const responseArea = await DataService.get(`${props.id}/mapCoordinates`);
       setExsitNotes(response.data);
       setArea(responseArea.data);
-
+      setResponse(response.data);
+      console.log("im here");
     })();
-  }, []);
+  }, [pickTool,newNotes]);
 
   function updateOptions(id) {
     let mySelector = Array.from(showMarks);
     mySelector.indexOf(id) === -1 ? mySelector.push(id) : mySelector.splice(mySelector.indexOf(id), 1)
     setShowMard(mySelector);
     console.log(mySelector);
-    renderMap();
+    //renderMap();
   }
 
   const printMousePos = (event) => {
@@ -84,12 +85,12 @@ const MapContainer = (props) => {
       mapCoordinate: Util.setAsPercentage(editArea , refContainer),
     };
     await DataService.create(myInfo, `${props.id}/mapCoordinates`);
-    renderMap();
+    //renderMap();
   };
 
   const removeMapCrud = async (id) => {
     await DataService.remove(`${props.id}/mapCoordinates/${id}`);
-    renderMap();
+    //renderMap();
   }
 
   //notes
@@ -105,12 +106,12 @@ const MapContainer = (props) => {
 
   // CRUD for notes
 
-  const renderMap = async () => {
-    const response = await DataService.get(`${props.id}/notesArr`);
-    const responseArea = await DataService.get(`${props.id}/mapCoordinates`);
-    setExsitNotes(response.data);
-    setArea(responseArea.data);
-  };
+  // const renderMap = async () => {
+  //   const response = await DataService.get(`${props.id}/notesArr`);
+  //   const responseArea = await DataService.get(`${props.id}/mapCoordinates`);
+  //   setExsitNotes(response.data);
+  //   setArea(responseArea.data);
+  // };
 
   const addNewNote = async (info) => {
     const myInfo = {
@@ -121,17 +122,17 @@ const MapContainer = (props) => {
     };
     await DataService.create(myInfo, `${props.id}/notesArr`);
     removeEditNote([info.left, info.top]);
-    renderMap();
+    //renderMap();
   };
 
   async function updateCrud(id, data) {
     await DataService.update(`${props.id}/notesArr/${id}`, { info: data });
-    renderMap();
+    //renderMap();
   }
 
   async function deleteCrud(id) {
     await DataService.remove(`${props.id}/notesArr/${id}`);
-    renderMap();
+    //renderMap();
   }
 
   //update new notes and rerender exist notes
