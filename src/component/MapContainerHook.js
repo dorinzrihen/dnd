@@ -9,44 +9,43 @@ import "../style-map/MapContainer.css";
 import MapDescription from "./MapDescription";
 import MapCanvas from "./canvas/MapCanvas";
 import MoreInfo from "./canvas/MoreInfo";
-import useWindowSize from './useWindowSize';
-
+import useWindowSize from "./useWindowSize";
+import Pin from "./Pin/Pin";
+import SquareButton from "./buttons/SquareButton";
 
 const MapContainer = (props) => {
-  const [response, setResponse] = useState([]);
+  const [open, setOpen] = useState(false);
   const [exsitNotes, setExsitNotes] = useState([]);
   const [newNotes, setNewNotes] = useState([]);
   const [pickTool, setPickTool] = useState("");
   const [area, setArea] = useState([]);
-  const [showMarks , setShowMard] = useState([]);
-
+  const [textPointer, setTextPointer] = useState([]);
+  const [textPointerExsit, setTextPointerExsit] = useState([]);
+  const [showMarks, setShowMarks] = useState([]);
+  const [renderNotes, setRenderNotes] = useState(false);
   const [editArea, setEditArea] = useState([]);
-  const [text, setText] = useState('');
-
+  const [text, setText] = useState("");
   const [width, height] = useWindowSize();
-  
-
   const ref = useRef();
   const refContainer = useRef();
+  
 
-  //run only once
   useEffect(() => {
     (async function () {
-      const response = await DataService.get(`${props.id}/notesArr`);
-      const responseArea = await DataService.get(`${props.id}/mapCoordinates`);
-      setExsitNotes(response.data);
-      setArea(responseArea.data);
-      setResponse(response.data);
-      console.log("im here");
+      const response = await DataService.get(`${props.id}`);
+      setExsitNotes(response.data.notes);
+      setArea(response.data.mapCoordinates);
+      setTextPointerExsit(response.data.pin);
     })();
-  }, [pickTool,newNotes]);
+  }, [renderNotes]);
 
+  console.log("again");
   function updateOptions(id) {
     let mySelector = Array.from(showMarks);
-    mySelector.indexOf(id) === -1 ? mySelector.push(id) : mySelector.splice(mySelector.indexOf(id), 1)
-    setShowMard(mySelector);
-    console.log(mySelector);
-    //renderMap();
+    mySelector.indexOf(id) === -1
+      ? mySelector.push(id)
+      : mySelector.splice(mySelector.indexOf(id), 1);
+    setShowMarks(mySelector);
   }
 
   const printMousePos = (event) => {
@@ -55,16 +54,22 @@ const MapContainer = (props) => {
       return;
     }
     if (pickTool === "note") {
-      const updateValue = Util.getCoordinates(myEvent, newNotes);
-      setNewNotes(updateValue);
+      const updateCoord = Util.getCoordinates(myEvent, newNotes);
+      setNewNotes(updateCoord);
+      setRenderNotes(true);
+      setToFasle();
     }
     if (pickTool === "select area") {
       const imgCoordination = event.target.getBoundingClientRect();
       const left = event.clientX - imgCoordination.x;
       const top = event.clientY - imgCoordination.y;
-      let updateValue = Array.from(editArea);
-      updateValue.push([left, top]);
-      setEditArea(updateValue);
+      let updateCoord = Array.from(editArea);
+      updateCoord.push([left, top]);
+      setEditArea(updateCoord);
+    }
+    if (pickTool === "Text") {
+      const updateCoord = Util.getCoordinates(myEvent, newNotes);
+      setTextPointer(updateCoord);
     }
   };
 
@@ -72,26 +77,41 @@ const MapContainer = (props) => {
     if (pickTool !== "select area") {
       return;
     }
-    updateNewMapSelectArea();
+    updateNewMapSelectArea({
+      title: text,
+      color: Util.getRandomColor(),
+      mapCoordinate: Util.setAsPercentage(editArea, refContainer),
+    });
     setEditArea("");
     setPickTool("");
   };
 
- 
-  const updateNewMapSelectArea = async () => {
-    const myInfo = {
-      title: text,
-      color: Util.getRandomColor(),
-      mapCoordinate: Util.setAsPercentage(editArea , refContainer),
-    };
-    await DataService.create(myInfo, `${props.id}/mapCoordinates`);
-    //renderMap();
+  //CRUD for pin
+  const addNewPin = async (info) => {
+    await Util.addToApi(props.id, info, "pin");
+    setTextPointer([]);
+    setRenderNotes(true);
+    setToFasle();
+  };
+
+  const deletePin = async (id) => {
+    await Util.deleteFromApi(props.id, "pin", id);
+    setRenderNotes(true);
+    setToFasle();
+  };
+
+  //CRUD for area
+  const updateNewMapSelectArea = async (data) => {
+    await Util.addToApi(props.id, data, "mapCoordinates");
+    setRenderNotes(true);
+    setToFasle();
   };
 
   const removeMapCrud = async (id) => {
-    await DataService.remove(`${props.id}/mapCoordinates/${id}`);
-    //renderMap();
-  }
+    await Util.deleteFromApi(props.id, "mapCoordinates", id);
+    setRenderNotes(true);
+    setToFasle();
+  };
 
   //notes
   const removeEditNote = (cotdineate) => {
@@ -101,53 +121,47 @@ const MapContainer = (props) => {
         cotdineate[1] !== newNotesCordineate[1]) &&
         newArrayOfNew.push(newNotesCordineate);
     }
+    setPickTool("");
     setNewNotes(newArrayOfNew);
+    setRenderNotes(true);
+    setToFasle();
   };
 
   // CRUD for notes
-
-  // const renderMap = async () => {
-  //   const response = await DataService.get(`${props.id}/notesArr`);
-  //   const responseArea = await DataService.get(`${props.id}/mapCoordinates`);
-  //   setExsitNotes(response.data);
-  //   setArea(responseArea.data);
-  // };
-
   const addNewNote = async (info) => {
-    const myInfo = {
-      x: info.left,
-      y: info.top,
-      info: info.value,
-      noteImg: info.noteBackGround,
-    };
-    await DataService.create(myInfo, `${props.id}/notesArr`);
-    removeEditNote([info.left, info.top]);
-    //renderMap();
+    await Util.addToApi(props.id, info, "notesArr");
+    removeEditNote([info.x, info.y]);
   };
 
-  async function updateCrud(id, data) {
-    await DataService.update(`${props.id}/notesArr/${id}`, { info: data });
-    //renderMap();
+  async function updateNote(id, data) {
+    await Util.updateApi(props.id, data, "notesArr", id, "info");
+    setRenderNotes(true);
+    setToFasle();
   }
 
-  async function deleteCrud(id) {
-    await DataService.remove(`${props.id}/notesArr/${id}`);
-    //renderMap();
+  async function deleteNote(id) {
+    await Util.deleteFromApi(props.id, "notesArr", id);
+    setRenderNotes(true);
+    setToFasle();
   }
+
+  const setToFasle = () => {
+    setRenderNotes(false);
+  };
 
   //update new notes and rerender exist notes
   const notes = exsitNotes.map((note, index) => {
     return (
       <Note
-        isVisibale={showMarks.indexOf('notes') === -1 ? true : false }
+        isVisibale={showMarks.indexOf("notes") === -1 ? true : false}
         id={note.id}
         key={index}
         left={note.x}
         top={note.y}
         info={note.info}
         noteSrc={note.noteImg}
-        onUpdate={updateCrud}
-        onDelete={deleteCrud}
+        onUpdate={updateNote}
+        onDelete={deleteNote}
       />
     );
   });
@@ -156,7 +170,7 @@ const MapContainer = (props) => {
     return (
       <NewNote
         isVisibale={true}
-        saveNewCard={addNewNote}
+        saveNew={addNewNote}
         key={index}
         left={note[0]}
         top={note[1]}
@@ -165,15 +179,57 @@ const MapContainer = (props) => {
     );
   });
 
+  const textPointers = textPointer.map((pin, index) => {
+    return (
+      <Pin
+        isVisibale={true}
+        saveNew={addNewPin}
+        key={index}
+        left={pin[0]}
+        top={pin[1]}
+      />
+    );
+  });
+
+  const existPin = textPointerExsit.map((pin, index) => {
+    return (
+      <Pin
+        id={pin.id}
+        value={pin.info}
+        isVisibale={showMarks.indexOf("pin") === -1 ? true : false}
+        saveNew={addNewPin}
+        onDelete={deletePin}
+        key={index}
+        left={pin.x}
+        top={pin.y}
+      />
+    );
+  });
+
   let exstraInfo = pickTool === "select area" && (
-    <MoreInfo value="Add Area Title" saveInfo={(value)=>setText(value)} />
+    <MoreInfo value="Add Area Title" saveInfo={(value) => setText(value)} />
+  );
+
+  const addedElement = (
+    <div>
+      <SquareButton
+        background="red"
+        value="X"
+        onClick={() => props.handleRemoveMap}
+      />
+    </div>
   );
 
   return (
-    <div className="mapBox">
+    <div
+      className="mapBox"
+      onClick={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
       <Tools
         changeTool={(tool) => setPickTool(tool)}
         tools={Util.toolsOptions()}
+        handelRemoveMap={()=> {props.handleRemoveMap(props.id)}}
       />
       <div
         ref={refContainer}
@@ -185,11 +241,22 @@ const MapContainer = (props) => {
           {exstraInfo}
           {notes}
           {setNewNote}
+          {textPointers}
+          {existPin}
         </div>
-        <MapCanvas size={refContainer} points={editArea} fullMapsPoints={area} unShow={showMarks} />
-        <MyMap backgroundMap={props.src}/>
+        <MapCanvas
+          size={refContainer}
+          points={editArea}
+          fullMapsPoints={area}
+          unShow={showMarks}
+        />
+        <MyMap backgroundMap={props.src} />
       </div>
-      <MapDescription updateInfo={updateOptions} mapSelect={area} removeMap={removeMapCrud}/>
+      <MapDescription
+        updateInfo={updateOptions}
+        mapSelect={area}
+        removeMap={removeMapCrud}
+      />
     </div>
   );
 };

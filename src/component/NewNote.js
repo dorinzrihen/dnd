@@ -17,7 +17,7 @@ const NewNote = (props) => {
         type="text"
         onChange={(e) => setValue(e.target.value)}
       ></textarea>
-      <SquareButton background="#0185ff" value="Create" clickHandler={() => props.saveNewCard({noteBackGround: props.noteSrc, top: props.top, left: props.left, value})} />
+      <SquareButton background="#0185ff" value="Create" clickHandler={() => props.saveNew({noteImg: props.noteSrc, y: props.top, x: props.left, info:value})} />
 
     </div>
   );

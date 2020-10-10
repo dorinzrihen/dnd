@@ -7,20 +7,24 @@ const MapDescription = (props) => {
   function updateInfo(click) {
     props.updateInfo(click);
   }
+  
+  const descriptionTitle = ['notes','pin'];
 
   let description = [];
 
-  const obj = (
-    <DescriptionInfo
-      updateInfo={updateInfo}
-      key={"notes"}
-      objValue={"notes"}
-      returnVal={"notes"}
-      isClicked={true}
-    />
-  );
+  for (const title of descriptionTitle){
+    const obj = (
+      <DescriptionInfo
+        updateInfo={updateInfo}
+        key={title}
+        objValue={title}
+        returnVal={title}
+        isClicked={true}
+      />
+    );
 
-  description.push(obj);
+    description.push(obj);
+  }
 
   for (const map of props.mapSelect) {
     const obj = (

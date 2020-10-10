@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Util from "../utility/Util";
 import "../style-map/Note.css";
 import SquareButton from "./buttons/SquareButton";
 
@@ -34,7 +33,7 @@ const Note = (props) => {
     }
   }
 
-  const AddedElement = (
+  const addedElement = (
     <div>
       <SquareButton background="#0185ff" value="Update" clickHandler={handleUpdate} />
       <SquareButton background="#B31004" value="Delete" clickHandler={handleDelete} />
@@ -68,7 +67,7 @@ const Note = (props) => {
       }}
     >
       {editUpdateMode}
-      {open && AddedElement}
+      {open && addedElement}
     </div>
   );
 };

@@ -60,6 +60,20 @@ const getBackCoordinate = (arr, ref) => {
 
 }
 
+//deal with the API 
+const addToApi = async (id,data,path) =>{
+  await DataService.create(data, `${id}/${path}`);
+}
+
+const updateApi = async (mapId,data,path,itemId,apiTitleName) =>{
+  await DataService.update(`${mapId}/${path}/${itemId}`, {[apiTitleName]: data});
+}
+
+const deleteFromApi = async (mapId,path,itemId) =>{
+  await DataService.remove(`${mapId}/${path}/${itemId}`);
+}
+
+
 export default {
   noteBackGround,
   getCoordinates,
@@ -68,4 +82,7 @@ export default {
   getRandomColor,
   setAsPercentage,
   getBackCoordinate,
+  addToApi,
+  updateApi,
+  deleteFromApi,
 };

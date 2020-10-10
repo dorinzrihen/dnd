@@ -1,5 +1,7 @@
 .tools{
     height: 35px;
-    background-color: lightgrey
-    ;
+    background-color: lightgrey;
+    display: flex;
+    justify-content: space-between;
 }
+
