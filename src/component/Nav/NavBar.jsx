@@ -1,6 +1,6 @@
 import React from 'react';
 import Burger from './Burger';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 const Nav = styled.nav`
   width: 100%;

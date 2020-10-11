@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import "../style-map/Note.css";
 import SquareButton from "./buttons/SquareButton";
 

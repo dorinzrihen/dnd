@@ -9,7 +9,8 @@ const MapCanvas = (props) => {
   useEffect(() => {
     const getSize = props.size.current.getBoundingClientRect();
     setSize([getSize.width, getSize.height]);
-  }, []);
+  }, [props.size]);
+
 
   const setPoints = (ctx, points, color=120) => {
     ctx.fillStyle = `hsla(${color},100%,50%,0.3)`;

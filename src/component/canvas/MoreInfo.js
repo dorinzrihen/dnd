@@ -1,5 +1,4 @@
 import React, { useState , useRef } from "react";
-import SquareButton from "../buttons/SquareButton";
 
 const MoreInfo = (props) => {
   const [value, setValue] = useState("");

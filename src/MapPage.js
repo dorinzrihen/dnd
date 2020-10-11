@@ -1,9 +1,9 @@
-import React, { useState, useEffect , useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import MapContainerHook from "./component/MapContainerHook";
 import SquareButton from "./component/buttons/SquareButton";
 import DataService from "./utility/DataService";
 import AddNewMapMsg from './component/map/AddNewMapMsg';
-import Util from './utility/Util';
+
 
 const MapPage = () => {
   const [response, setResponse] = useState([]);
@@ -12,10 +12,9 @@ const MapPage = () => {
 
   useEffect(() => {
     (async function () {
-      const response = await DataService.get("");
+      const response = await DataService.get('data');
       setMapCounter(response.data.length);
       setResponse(response.data);
-      console.log("hi");
     })();
   }, [mapCounter]);
 
@@ -29,13 +28,13 @@ const MapPage = () => {
     const myInfo = {
       mapSrc: value,
     };
-    await DataService.create(myInfo, ``);
+    await DataService.create(myInfo, `data`);
     setEditMode(false);
     setMapCounter(mapCounter+1);
   }
 
   const removeMap = async (id) => {
-    await DataService.remove(id);
+    await DataService.remove(`${id}`);
     setMapCounter(mapCounter-1);
   }
 

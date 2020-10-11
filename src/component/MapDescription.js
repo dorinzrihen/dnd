@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import DescriptionInfo from "./description/DescriptionInfo";
 import "../style-map/MapDescription.css";
 import SquareButton from "./buttons/SquareButton";

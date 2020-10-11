@@ -14,7 +14,6 @@ import Pin from "./Pin/Pin";
 import SquareButton from "./buttons/SquareButton";
 
 const MapContainer = (props) => {
-  const [open, setOpen] = useState(false);
   const [exsitNotes, setExsitNotes] = useState([]);
   const [newNotes, setNewNotes] = useState([]);
   const [pickTool, setPickTool] = useState("");
@@ -30,9 +29,11 @@ const MapContainer = (props) => {
   const refContainer = useRef();
   
 
+  const fullPath = `data/${props.id}`;
+
   useEffect(() => {
     (async function () {
-      const response = await DataService.get(`${props.id}`);
+      const response = await DataService.get(fullPath);
       setExsitNotes(response.data.notes);
       setArea(response.data.mapCoordinates);
       setTextPointerExsit(response.data.pin);
@@ -88,27 +89,27 @@ const MapContainer = (props) => {
 
   //CRUD for pin
   const addNewPin = async (info) => {
-    await Util.addToApi(props.id, info, "pin");
+    await Util.addToApi(fullPath, info, "pin");
     setTextPointer([]);
     setRenderNotes(true);
     setToFasle();
   };
 
   const deletePin = async (id) => {
-    await Util.deleteFromApi(props.id, "pin", id);
+    await Util.deleteFromApi(fullPath, "pin", id);
     setRenderNotes(true);
     setToFasle();
   };
 
   //CRUD for area
   const updateNewMapSelectArea = async (data) => {
-    await Util.addToApi(props.id, data, "mapCoordinates");
+    await Util.addToApi(fullPath, data, "mapCoordinates");
     setRenderNotes(true);
     setToFasle();
   };
 
   const removeMapCrud = async (id) => {
-    await Util.deleteFromApi(props.id, "mapCoordinates", id);
+    await Util.deleteFromApi(fullPath, "mapCoordinates", id);
     setRenderNotes(true);
     setToFasle();
   };
@@ -129,18 +130,18 @@ const MapContainer = (props) => {
 
   // CRUD for notes
   const addNewNote = async (info) => {
-    await Util.addToApi(props.id, info, "notesArr");
+    await Util.addToApi(fullPath, info, "notesArr");
     removeEditNote([info.x, info.y]);
   };
 
   async function updateNote(id, data) {
-    await Util.updateApi(props.id, data, "notesArr", id, "info");
+    await Util.updateApi(fullPath, data, "notesArr", id, "info");
     setRenderNotes(true);
     setToFasle();
   }
 
   async function deleteNote(id) {
-    await Util.deleteFromApi(props.id, "notesArr", id);
+    await Util.deleteFromApi(fullPath, "notesArr", id);
     setRenderNotes(true);
     setToFasle();
   }
@@ -222,14 +223,11 @@ const MapContainer = (props) => {
 
   return (
     <div
-      className="mapBox"
-      onClick={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
-    >
+      className="mapBox">
       <Tools
         changeTool={(tool) => setPickTool(tool)}
         tools={Util.toolsOptions()}
-        handelRemoveMap={()=> {props.handleRemoveMap(props.id)}}
+        handelRemoveMap={()=> {props.handleRemoveMap(fullPath)}}
       />
       <div
         ref={refContainer}

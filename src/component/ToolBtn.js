@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 const ToolBtn = (props) => {
   return <button onClick={() => {props.click()}}>{props.title}</button>;
