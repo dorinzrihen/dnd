@@ -22,7 +22,7 @@ const Pin = (props) => {
     backgroundImage: `url(${props.noteSrc})`,
   };
   const data = props.value ? (
-    <p>{props.value}</p>
+    <p style={{backgroundColor: "white"}}>{props.value}</p>
   ) : (
     <input
       type="text"

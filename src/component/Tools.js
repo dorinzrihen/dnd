@@ -8,6 +8,7 @@ const Tools = (props) => {
   for (const tool in props.tools) {
     const btn = (
       <ToolBtn
+      background={props.tools[tool] === props.toolPicked && "#4897C9" }
         key={tool}
         click={() => {
           props.changeTool(props.tools[tool]);

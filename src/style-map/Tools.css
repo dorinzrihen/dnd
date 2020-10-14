@@ -1,7 +1,23 @@
-.tools{
-    height: 35px;
-    background-color: lightgrey;
-    display: flex;
-    justify-content: space-between;
+.tools {
+  height: 35px;
+  display: flex;
+  justify-content: space-between;
 }
 
+.tools > div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.tools > div > button {
+  padding: 5px;
+  cursor: pointer;
+  border: none;
+  margin: 2px;
+}
+
+.tools > div > button:hover {
+    background-color: #4897C9;
+  }

@@ -24,6 +24,17 @@ const getCoordinates = (event, existsPoints) => {
   return updateValue;
 };
 
+const getPinCoordinates = (event, existsPoints) => {
+  const imgCoordination = event.target.getBoundingClientRect();
+  const left = (event.clientX - imgCoordination.x) / imgCoordination.width;
+  const top = (event.clientY - imgCoordination.y -20) / imgCoordination.height;
+  const leftPercentage = Math.floor(left.toFixed(3) * 100);
+  const topPercentage = Math.floor(top.toFixed(3) * 100);
+  let updateValue = Array.from(existsPoints);
+  updateValue.push([leftPercentage, topPercentage]);
+  return updateValue;
+};
+
 const toolsOptions = () => {
   return ["note", "select area",'Text'];
 };
@@ -77,6 +88,7 @@ const deleteFromApi = async (mapId,path,itemId) =>{
 export default {
   noteBackGround,
   getCoordinates,
+  getPinCoordinates,
   toolsOptions,
   getRandom,
   getRandomColor,

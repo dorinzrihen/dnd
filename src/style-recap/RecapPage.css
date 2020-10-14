@@ -11,8 +11,9 @@
   border: 1px solid black;
   width: 85vw;
   position: relative;
-  margin-top: 50px;
+  margin: 25px;
   background-color: #e4dbd9;
+  border-radius: 5px;
 }
 
 .recap-template .img-header {

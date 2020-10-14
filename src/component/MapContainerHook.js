@@ -12,6 +12,7 @@ import MoreInfo from "./canvas/MoreInfo";
 import useWindowSize from "./useWindowSize";
 import Pin from "./Pin/Pin";
 import SquareButton from "./buttons/SquareButton";
+import Loader from "./Loader";
 
 const MapContainer = (props) => {
   const [exsitNotes, setExsitNotes] = useState([]);
@@ -25,18 +26,24 @@ const MapContainer = (props) => {
   const [editArea, setEditArea] = useState([]);
   const [text, setText] = useState("");
   const [width, height] = useWindowSize();
+  const [load, setLoad] = useState(false);
   const ref = useRef();
   const refContainer = useRef();
-  
 
   const fullPath = `data/${props.id}`;
 
   useEffect(() => {
     (async function () {
-      const response = await DataService.get(fullPath);
-      setExsitNotes(response.data.notes);
-      setArea(response.data.mapCoordinates);
-      setTextPointerExsit(response.data.pin);
+      try {
+        setLoad(true);
+        const response = await DataService.get(fullPath);
+        setExsitNotes(response.data.notes);
+        setArea(response.data.mapCoordinates);
+        setTextPointerExsit(response.data.pin);
+        setLoad(false);
+      } catch {
+        throw "Unable to get the data";
+      }
     })();
   }, [renderNotes]);
 
@@ -69,7 +76,7 @@ const MapContainer = (props) => {
       setEditArea(updateCoord);
     }
     if (pickTool === "Text") {
-      const updateCoord = Util.getCoordinates(myEvent, newNotes);
+      const updateCoord = Util.getPinCoordinates(myEvent, newNotes);
       setTextPointer(updateCoord);
     }
   };
@@ -89,29 +96,53 @@ const MapContainer = (props) => {
 
   //CRUD for pin
   const addNewPin = async (info) => {
-    await Util.addToApi(fullPath, info, "pin");
-    setTextPointer([]);
-    setRenderNotes(true);
-    setToFasle();
+    try {
+      setLoad(true);
+      await Util.addToApi(fullPath, info, "pin");
+      setTextPointer([]);
+      setRenderNotes(true);
+      setToFasle();
+      setLoad(false);
+    } catch {
+      throw "Somthing wrong";
+    }
   };
 
   const deletePin = async (id) => {
-    await Util.deleteFromApi(fullPath, "pin", id);
-    setRenderNotes(true);
-    setToFasle();
+    try {
+      setLoad(true);
+      await Util.deleteFromApi(fullPath, "pin", id);
+      setRenderNotes(true);
+      setToFasle();
+      setLoad(false);
+    } catch {
+      throw "Somthing wrong";
+    }
   };
 
   //CRUD for area
   const updateNewMapSelectArea = async (data) => {
-    await Util.addToApi(fullPath, data, "mapCoordinates");
-    setRenderNotes(true);
-    setToFasle();
+    try {
+      setLoad(true);
+      await Util.addToApi(fullPath, data, "mapCoordinates");
+      setRenderNotes(true);
+      setToFasle();
+      setLoad(false);
+    } catch {
+      throw "Unable get the Data"
+    }
   };
 
   const removeMapCrud = async (id) => {
-    await Util.deleteFromApi(fullPath, "mapCoordinates", id);
-    setRenderNotes(true);
-    setToFasle();
+    try {
+      setLoad(true);
+      await Util.deleteFromApi(fullPath, "mapCoordinates", id);
+      setRenderNotes(true);
+      setToFasle();
+      setLoad(false);
+    } catch {
+      throw "Unable get the Data"
+    }
   };
 
   //notes
@@ -130,20 +161,38 @@ const MapContainer = (props) => {
 
   // CRUD for notes
   const addNewNote = async (info) => {
-    await Util.addToApi(fullPath, info, "notesArr");
-    removeEditNote([info.x, info.y]);
+    try {
+      setLoad(true);
+      await Util.addToApi(fullPath, info, "notesArr");
+      removeEditNote([info.x, info.y]);
+      setLoad(false);
+    } catch {
+      throw "Unable get the Data"
+    }
   };
 
   async function updateNote(id, data) {
-    await Util.updateApi(fullPath, data, "notesArr", id, "info");
-    setRenderNotes(true);
-    setToFasle();
+    try {
+      setLoad(true);
+      await Util.updateApi(fullPath, data, "notesArr", id, "info");
+      setRenderNotes(true);
+      setToFasle();
+      setLoad(false);
+    } catch {
+      throw "Unable get the Data";
+    }
   }
 
   async function deleteNote(id) {
-    await Util.deleteFromApi(fullPath, "notesArr", id);
-    setRenderNotes(true);
-    setToFasle();
+    try {
+      setLoad(true);
+      await Util.deleteFromApi(fullPath, "notesArr", id);
+      setRenderNotes(true);
+      setToFasle();
+      setLoad(false);
+    } catch {
+      throw "Unable get the Data"
+    }
   }
 
   const setToFasle = () => {
@@ -222,12 +271,15 @@ const MapContainer = (props) => {
   );
 
   return (
-    <div
-      className="mapBox">
+    <div className="mapBox">
+      {load && <Loader/>}
       <Tools
         changeTool={(tool) => setPickTool(tool)}
+        toolPicked={pickTool}
         tools={Util.toolsOptions()}
-        handelRemoveMap={()=> {props.handleRemoveMap(fullPath)}}
+        handelRemoveMap={() => {
+          props.handleRemoveMap(fullPath);
+        }}
       />
       <div
         ref={refContainer}

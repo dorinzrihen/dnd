@@ -1,13 +1,44 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import HomepagePage from "./component/homepage/HomepagePage";
+import "./homepage-style/LandingPage.css";
 
 class LandingPage extends Component {
-    render() {
-        return (
-            <div>
-              homepage  
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div>
+        <div className="mainPageTitle">
+          <h1>-דרך האזמרגד- Emerald road -</h1>
+          <h1>-האמת בפירמידה- Pyramid's Truth -</h1>
+        </div>
+        <HomepagePage
+          img="https://res.cloudinary.com/dqrxjebxc/image/upload/v1602673455/homepage/Screenshot_21_tnbth2.png"
+          title="ממלכת נפרקהור"
+          info=" כמה ימים לפני מלחמת השבר, כל הערים שבממלכה הגמדית בת אלפי השנים נעלמו מעל פני אדמה. לפני מספר עשורים בודדים, המדבר החל לחשוף עוד ועוד ערים מהחול לעולם, רוב יושביה כעת אל מתים עטופי תכריכים. מספר לא מבוטל של חיים עברו להתגורר בערי הלזוטפ, נמשכו לשם עי הבטחות של אושר קדום וקסם עתיק."
+        />
+        <HomepagePage
+          img="https://res.cloudinary.com/dqrxjebxc/image/upload/v1602673454/homepage/Screenshot_1_makptg.png"
+          title="ג'יראסול"
+          info="מלחמת השבר ושחרור האטר באוויר הוביל ליצירתם של שערים רבים, בהם עברו יצורים רבים מהמישורים היסודניים. לאחר שהשערים נסגרו, הרבה מאותם יצורים נשארו מאחור. ג'ינים, אפריטים, יסודנים ועוד. הם החליטו לבנות את ביתם החדש חבוי בהרים שמפרידים בין שתי הממלכות, והפכו את המקום לגן פורח של קסם ועושר. נדירים הזרים שזכו להיכנס לבירתם המקודשת, ונדירים עוד יותר האנשים שבחרו לצאת משם לאחר שראו אותה במו עיניהם.
+          "
+        />
+        <HomepagePage
+          img="https://res.cloudinary.com/dqrxjebxc/image/upload/v1602673455/homepage/Screenshot_2_vo7n3h.png"
+          title="גוש הנאריקס"
+          info="אזור הררי ומשופע. קריר יותר, עם מזג אוויר יציב, אך רוחות חזקות. גוש הנאריקס מאופיין בתרבויות מזרח ומרכז אסיאתיות. גדול משמעותית מאזור הזאנט, ומקיף אותו כמו חצי סער. "
+        />
+        <HomepagePage
+          img="https://res.cloudinary.com/dqrxjebxc/image/upload/v1602673455/homepage/Screenshot_4_kx2mea.png"
+          title="שושלת הזיאנג טואן"
+          info="קיסרות עתיקה שהחליפה מספר בתי מלוכה לאורך השנים עקב מאבקים פוליטיים, שנשלטת בידי מספר בתי אצולה של יואן-טי, אנשים בעלי מאפיינים נחשיים. באיזור משפחות סוחרים אצילות בעלות מעמד גבוה משמרות את הסאטוס הקיים, ודואגות לשמור על הגדרת מעמדות חדה וברורה. נסיבות הלידה מכתיבות איזה חיים תחייה, כמה כסף תרוויח ואיפה תגור, וקשה מאוד לעבור בין סולם המעמדות, בעיקר בלי ללכלך את הידיים."
+        />
+        <HomepagePage
+          img="https://res.cloudinary.com/dqrxjebxc/image/upload/v1602673455/homepage/Screenshot_3_swzmha.png"
+          title="שושלת הזיאנג טואן"
+          info="קיסרות עתיקה שהחליפה מספר בתי מלוכה לאורך השנים עקב מאבקים פוליטיים, שנשלטת בידי מספר בתי אצולה של יואן-טי, אנשים בעלי מאפיינים נחשיים. באיזור משפחות סוחרים אצילות בעלות מעמד גבוה משמרות את הסאטוס הקיים, ודואגות לשמור על הגדרת מעמדות חדה וברורה. נסיבות הלידה מכתיבות איזה חיים תחייה, כמה כסף תרוויח ואיפה תגור, וקשה מאוד לעבור בין סולם המעמדות, בעיקר בלי ללכלך את הידיים."
+        />
+      </div>
+    );
+  }
 }
 
 export default LandingPage;

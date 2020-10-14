@@ -12,7 +12,7 @@ const RecapPostContainer = (props) => {
 
   const firstUpdate = useRef(true);
 
-  useEffect(async () => {
+  useEffect(() => {
     setImgUrl(props.img);
     setTitle(props.title);
     setStory(props.story);
@@ -31,7 +31,6 @@ const RecapPostContainer = (props) => {
     story === `` && setEditText(true);
   }, [editImage, editTitle, editText]);
 
-  console.log("rerender");
 
   const editNewImg = !editImage ? (
     <img
@@ -100,7 +99,13 @@ const RecapPostContainer = (props) => {
         {editNewStory}
       </div>
       <div className="footer-Options">
-        <SquareButton background="#2f4c58" value="remove" />
+        <SquareButton
+          background="#2f4c58"
+          value="remove"
+          clickHandler={() => {
+            props.removeRecapHendler(props.id);
+          }}
+        />
       </div>
     </div>
   );
