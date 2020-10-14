@@ -18,7 +18,7 @@ const RecapPage = () => {
         setResponse(response.data);
         setLoad(false);
       } catch {
-        throw "Unable connect";
+        console.log("Unable connect");
       }
     }
     fetchData();
@@ -37,7 +37,7 @@ const RecapPage = () => {
       forceUpdate();
       setLoad(false);
     } catch {
-      throw "Unable connect";
+      console.log("Unable connect");
     }
   };
 
@@ -47,7 +47,7 @@ const RecapPage = () => {
       await DataService.update(`recap/${id}`, data);
       setLoad(false);
     } catch {
-      throw "Unable connect";
+      console.log("Unable connect");
     }
   };
 
@@ -58,7 +58,7 @@ const RecapPage = () => {
       setLoad(false);
       forceUpdate();
     } catch {
-      throw "Unable connect";
+      console.log("Unable connect");
     }
   };
 

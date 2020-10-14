@@ -11,7 +11,6 @@ import MapCanvas from "./canvas/MapCanvas";
 import MoreInfo from "./canvas/MoreInfo";
 import useWindowSize from "./useWindowSize";
 import Pin from "./Pin/Pin";
-import SquareButton from "./buttons/SquareButton";
 import Loader from "./Loader";
 
 const MapContainer = (props) => {
@@ -42,12 +41,11 @@ const MapContainer = (props) => {
         setTextPointerExsit(response.data.pin);
         setLoad(false);
       } catch {
-        throw "Unable to get the data";
+        console.log("Unable to get the data");
       }
     })();
-  }, [renderNotes]);
+  }, [renderNotes, width, height, fullPath]);
 
-  console.log("again");
   function updateOptions(id) {
     let mySelector = Array.from(showMarks);
     mySelector.indexOf(id) === -1
@@ -104,7 +102,7 @@ const MapContainer = (props) => {
       setToFasle();
       setLoad(false);
     } catch {
-      throw "Somthing wrong";
+      console.log("Somthing wrong");
     }
   };
 
@@ -116,7 +114,7 @@ const MapContainer = (props) => {
       setToFasle();
       setLoad(false);
     } catch {
-      throw "Somthing wrong";
+      console.log("Somthing wrong");
     }
   };
 
@@ -129,7 +127,7 @@ const MapContainer = (props) => {
       setToFasle();
       setLoad(false);
     } catch {
-      throw "Unable get the Data"
+      console.log("Unable get the Data");
     }
   };
 
@@ -141,7 +139,7 @@ const MapContainer = (props) => {
       setToFasle();
       setLoad(false);
     } catch {
-      throw "Unable get the Data"
+      console.log("Unable get the Data");
     }
   };
 
@@ -167,7 +165,7 @@ const MapContainer = (props) => {
       removeEditNote([info.x, info.y]);
       setLoad(false);
     } catch {
-      throw "Unable get the Data"
+      console.log("Unable get the Data");
     }
   };
 
@@ -179,7 +177,7 @@ const MapContainer = (props) => {
       setToFasle();
       setLoad(false);
     } catch {
-      throw "Unable get the Data";
+      console.log("Unable get the Data");
     }
   }
 
@@ -191,7 +189,7 @@ const MapContainer = (props) => {
       setToFasle();
       setLoad(false);
     } catch {
-      throw "Unable get the Data"
+      console.log("Unable get the Data");
     }
   }
 
@@ -260,19 +258,9 @@ const MapContainer = (props) => {
     <MoreInfo value="Add Area Title" saveInfo={(value) => setText(value)} />
   );
 
-  const addedElement = (
-    <div>
-      <SquareButton
-        background="red"
-        value="X"
-        onClick={() => props.handleRemoveMap}
-      />
-    </div>
-  );
-
   return (
     <div className="mapBox">
-      {load && <Loader/>}
+      {load && <Loader />}
       <Tools
         changeTool={(tool) => setPickTool(tool)}
         toolPicked={pickTool}

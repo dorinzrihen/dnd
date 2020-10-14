@@ -28,7 +28,8 @@ const MapDescription = (props) => {
 
   for (const map of props.mapSelect) {
     const obj = (
-      <div key={map.title.value}>
+      // eslint-disable-next-line
+      <div key={map.title.value} key={map.id+999}>
         <DescriptionInfo
           updateInfo={updateInfo}
           key={map.id}
@@ -36,7 +37,7 @@ const MapDescription = (props) => {
           returnVal={map.id}
           isClicked={true}
         />
-        <SquareButton background="#787878" value="Remove" clickHandler={()=>props.removeMap(map.id)}/>
+        <SquareButton key={map.id+305} background="#787878" value="Remove" clickHandler={()=>props.removeMap(map.id)}/>
       </div>
     );
     description.push(obj);

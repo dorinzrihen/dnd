@@ -24,7 +24,26 @@ const MapCanvas = (props) => {
     ctx.fill();
   };
 
-  const draw = (ctx) => {
+  // const draw = (ctx) => {
+  //   ctx.clearRect(0, 0, size[0], size[1]);
+  //   if (props.points.length) {
+  //     setPoints(ctx, props.points);
+  //   }
+  //   if (props.fullMapsPoints.length) {
+  //     for (const map of props.fullMapsPoints) {
+  //       const backToPoints = Util.getBackCoordinate(map.mapCoordinate , props.size);
+  //       if(props.unShow.indexOf(map.id) === -1){
+  //         setPoints(ctx, backToPoints, map.color);
+  //       }
+  //     }
+  //   }
+  // };
+
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    //draw(ctx);
     ctx.clearRect(0, 0, size[0], size[1]);
     if (props.points.length) {
       setPoints(ctx, props.points);
@@ -37,13 +56,7 @@ const MapCanvas = (props) => {
         }
       }
     }
-  };
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    draw(ctx);
-  }, [draw]);
+  });
 
   return (
     <>

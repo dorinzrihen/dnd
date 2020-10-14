@@ -21,7 +21,7 @@ const MapPage = () => {
         setLoad(false);
       }
       catch{
-        throw "Unable to get the DATA"
+        console.log("Unable to get the DATA");
       }
 
     })();

@@ -19,7 +19,7 @@ const RecapPostContainer = (props) => {
     props.img === `` && setEditImage(true);
     props.title === `` && setEditTitle(true);
     props.story === `` && setEditText(true);
-  }, []);
+  }, [props.img,props.title,props.story]);
 
   useLayoutEffect(() => {
     if (firstUpdate.current) {
@@ -29,7 +29,7 @@ const RecapPostContainer = (props) => {
     imgUrl === `` && setEditImage(true);
     title === `` && setEditTitle(true);
     story === `` && setEditText(true);
-  }, [editImage, editTitle, editText]);
+  }, [editImage, editTitle, editText, imgUrl , title , story]);
 
 
   const editNewImg = !editImage ? (

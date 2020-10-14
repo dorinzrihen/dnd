@@ -1,13 +1,13 @@
 .mapBox {
   width: 85%;
-  height: 70vh;
+  height: 75vh;
   border: 1px solid black;
   margin-top: 20px;
   border-radius: 5px;
 }
 
 .MapContainer{
-    height: calc(100% - 80px);
+    height: calc(100% - 100px);
     position: relative;
 }
 
@@ -15,7 +15,7 @@
   opacity: 0;
   pointer-events: none;
 
-}
+} 
 
 .mapBox .imgFormat{
   user-select: none;
